@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Image, Dimensions, Alert } from "react-native";
+import { Actions } from "react-native-router-flux";
+import { connect } from "react-redux";
+
 import { Button, Link } from "./../component/Button";
 import { TxtInput as TextInput } from "./../component/TextInput";
-import { Actions } from "react-native-router-flux";
 
 const { width } = Dimensions.get("window");
 
@@ -14,6 +16,19 @@ class Login extends React.Component {
       txtPassword: ""
     };
   }
+
+  didLogin = () => {
+    const { txtUsername, txtPassword } = this.state;
+    const { userList } = this.props.user;
+
+    const result = userList.filter(user => {
+      return user.username === txtUsername && user.password === txtPassword;
+    });
+
+    if (result.length === 0) Alert.alert("Oops", "Username and Password does not match");
+    else Actions.dashboard();
+  };
+
   render() {
     const { txtUsername, txtPassword } = this.state;
     return (
@@ -32,7 +47,7 @@ class Login extends React.Component {
           value={txtPassword}
           onChangeText={txtPassword => this.setState({ txtPassword })}
         />
-        <Button style={{ marginTop: 50 }} title="Login" onPress={() => Actions.dashboard()} />
+        <Button style={{ marginTop: 50 }} title="Login" onPress={this.didLogin} />
 
         <Link style={{ marginTop: 10 }} title="Register" onPress={() => Actions.register()} />
       </View>
@@ -56,4 +71,5 @@ const styles = StyleSheet.create({
     fontWeight: "300"
   }
 });
-export default Login;
+
+export default connect(state => ({ user: state.user }))(Login);
