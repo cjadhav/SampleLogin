@@ -16,7 +16,8 @@ global.AscyncKeys = { userDetails: "UserObject" };
 
 export default class App extends Component {
   handleHardwareBackPress() {
-    if (Actions.currentScene === "login" || Actions.currentScene === "dashboard") {
+    console.log(Actions.currentScene);
+    if (Actions.currentScene === "login" || Actions.currentScene === "_dashboard") {
       BackHandler.exitApp();
     } else {
       Actions.pop();
