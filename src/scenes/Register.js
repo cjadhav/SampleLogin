@@ -47,7 +47,9 @@ class Register extends React.Component {
       password: txtPassword
     });
     this.props.setUser({ ...this.props.user, userList });
-    Actions.popTo("login");
+    Alert.alert("Success", "User successfully registered.\nPlease login to confirm.", [
+      { text: "OK", onPress: () => Actions.popTo("login") }
+    ]);
   };
 
   render() {

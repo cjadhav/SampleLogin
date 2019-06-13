@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 
 import { Button, Link } from "./../component/Button";
 import { TxtInput as TextInput } from "./../component/TextInput";
+import Storage from "./../utils/AsyncStorage";
 
 const { width } = Dimensions.get("window");
 
@@ -16,8 +17,18 @@ class Login extends React.Component {
       txtPassword: ""
     };
   }
+  componentWillMount() {
+    this.lastLogin();
+  }
 
-  didLogin = () => {
+  lastLogin = async () => {
+    const userDetails = JSON.parse(await Storage.getString(global.AscyncKeys.userDetails));
+    if (userDetails !== null) {
+      Actions.dashboard();
+    }
+  };
+
+  didLogin = async () => {
     const { txtUsername, txtPassword } = this.state;
     const { userList } = this.props.user;
 
@@ -25,8 +36,12 @@ class Login extends React.Component {
       return user.username === txtUsername && user.password === txtPassword;
     });
 
-    if (result.length === 0) Alert.alert("Oops", "Username and Password does not match");
-    else Actions.dashboard();
+    if (result.length === 0) {
+      Alert.alert("Oops", "Username and Password does not match");
+    } else {
+      await Storage.saveString(global.AscyncKeys.userDetails, JSON.stringify(result[0]));
+      Actions.dashboard();
+    }
   };
 
   render() {
@@ -39,10 +54,15 @@ class Login extends React.Component {
           source={require("./../../assets/images/logo.png")}
         />
         <Text style={styles.txtLabel}>UserName</Text>
-        <TextInput value={txtUsername} onChangeText={txtUsername => this.setState({ txtUsername })} />
+        <TextInput
+          placeholder="Enter username"
+          value={txtUsername}
+          onChangeText={txtUsername => this.setState({ txtUsername })}
+        />
 
         <Text style={styles.txtLabel}>Password</Text>
         <TextInput
+          placeholder="Enter password"
           secureTextEntry={true}
           value={txtPassword}
           onChangeText={txtPassword => this.setState({ txtPassword })}
