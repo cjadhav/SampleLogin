@@ -18,14 +18,14 @@ class Dashboard extends React.Component {
   }
 
   getUserDetails = async () => {
-    const userDetails = await Storage.getString(global.AscyncKeys.userDetails);
-    this.setState({ userDetails: JSON.parse(userDetails) });
+    const userDetails = JSON.parse(await Storage.getString(global.AscyncKeys.userDetails));
+    this.setState({ userDetails });
   };
   render() {
     const { firstname, lastname } = this.state.userDetails;
     return (
       <View style={styles.container}>
-        <Text>{"Welcome " + firstname + " " + lastname}</Text>
+        <Text style={styles.txtWelcome}>{"Welcome\n" + firstname + " " + lastname}</Text>
       </View>
     );
   }
@@ -35,8 +35,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#dddddd"
+    alignItems: "center"
+  },
+  txtWelcome: {
+    textAlign: "center",
+    fontSize: 20
   }
 });
 
