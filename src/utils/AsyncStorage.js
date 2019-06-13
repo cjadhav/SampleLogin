@@ -4,7 +4,6 @@ let Async = {};
 
 // Async Storage for String value
 Async.saveString = async (key, value) => {
-  // await AsyncStorage.setItem(key, "");
   await AsyncStorage.setItem(key, value);
 };
 Async.getString = async (key, callback) => {

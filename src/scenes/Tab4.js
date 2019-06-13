@@ -5,7 +5,7 @@ class Tab4 extends React.Component {
   render() {
     return (
       <View>
-        <Text>Login</Text>
+        <Text>Tab 4</Text>
       </View>
     );
   }
